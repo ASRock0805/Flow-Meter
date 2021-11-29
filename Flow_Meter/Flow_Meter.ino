@@ -14,8 +14,8 @@
 #define flowPin 2 // The pin location of the sensor (D2) w/ interrupt (INT.0)
 
 /*--- Constant ---*/
-const unsigned long baudSpeed = 115200; // Sets the data rate in bits per second (baud) for serial data transmission
-const unsigned long period = 1000;      // The value is a number of milliseconds
+const unsigned long baudSpeed = 115200UL; // Sets the data rate in bits per second (baud) for serial data transmission
+const unsigned long period = 1000UL;      // The value is a number of milliseconds
 
 /*--- Global Variables ---*/
 unsigned long startTime;            // Start time
@@ -48,8 +48,8 @@ void setup(void) {
  // Flow Sensor Initialization
   pulseCount = 0;
   cumCount = 0;
-  flowRate = 0.0;
-  flowML = 0.0;
+  flowRate = 0.0f;
+  flowML = 0.0f;
   attachInterrupt(digitalPinToInterrupt(flowPin), getCounter, FALLING); // The interrupt is attached
 }
 
@@ -65,10 +65,10 @@ void loop(void) {
     detachInterrupt(digitalPinToInterrupt(flowPin));  // Clears the function used to attend a specific interrupt
     cumCount = cumCount + pulseCount;                 // Count increment
     // Estimated Volume: 0.5004 ml/Pulse
-    flowRate = abs(((-7.0 * pow(10.0, -18.0)) * sq(pulseCount)) + (0.5004 * pulseCount) - (8.0 * pow(10.0, -12.0)));
-    flowML = flowRate * 60.0;                         // Milliliter per pulse converter to milliliter per minute
+    flowRate = (float)abs(((-7.0f * pow(10.0, -18.0)) * sq(pulseCount)) + (0.5004f * pulseCount) - (8.0f * pow(10.0, -12.0)));
+    flowML = flowRate * 60.0f;                         // Milliliter per pulse converter to milliliter per minute
 
-    if (isinf(flowML) || isnan(flowML) || (flowML <= 0.0)) {
+    if (isinf(flowML) || isnan(flowML) || (flowML <= 0.0f)) {
       flowML = -1;
     }
 
